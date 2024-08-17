@@ -1,0 +1,15 @@
+/* BookingForm.module.scss */
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .confirmation {
+    color: green;
+  }
+  
