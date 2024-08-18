@@ -1,91 +1,122 @@
+// src/components/AdminDashboard/AdminDashboard.tsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './AdminDashboard.module.scss';
 
 const AdminDashboard: React.FC = () => {
-  const [origin, setOrigin] = useState('');
-  const [destination, setDestination] = useState('');
-  const [departureDate, setDepartureDate] = useState('');
-  const [returnDate, setReturnDate] = useState('');
-  const [price, setPrice] = useState<number | ''>('');
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    originCode: '',
+    origin: '',
+    originCountry: '',
+    destinationCode: '',
+    destination: '',
+    destinationCountry: '',
+    departureDate: '',
+    returnDate: '',
+    price: 0,
+  });
 
-  const handleCreateFlight = async (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setMessage(null);
-
     try {
-      const token = localStorage.getItem('admin_token');
-      const response = await axios.post(
-        'https://localhost:3000/flights',
-        {
-          origin,
-          destination,
-          departureDate,
-          returnDate,
-          price,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setMessage('Flight created successfully!');
-      setOrigin('');
-      setDestination('');
-      setDepartureDate('');
-      setReturnDate('');
-      setPrice('');
+      await axios.post('https://localhost:3000/flights', formData, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      alert('Flight created successfully!');
     } catch (error) {
-      setError('Error creating flight. Please try again.');
+      console.error('Error creating flight:', error);
+      alert('Failed to create flight. Please try again.');
     }
   };
 
   return (
-    <div className={styles['dashboard-container']}>
-      <h2>Admin Dashboard</h2>
-      <form className={styles['create-flight-form']} onSubmit={handleCreateFlight}>
+    <div className={styles['admin-dashboard']}>
+      <h1>Create New Flight</h1>
+      <form onSubmit={handleSubmit} className={styles['flight-form']}>
         <input
           type="text"
+          name="originCode"
+          placeholder="Origin Code"
+          value={formData.originCode}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="origin"
           placeholder="Origin"
-          value={origin}
-          onChange={(e) => setOrigin(e.target.value)}
+          value={formData.origin}
+          onChange={handleChange}
           required
         />
         <input
           type="text"
+          name="originCountry"
+          placeholder="Origin Country"
+          value={formData.originCountry}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="destinationCode"
+          placeholder="Destination Code"
+          value={formData.destinationCode}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="destination"
           placeholder="Destination"
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
+          value={formData.destination}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="destinationCountry"
+          placeholder="Destination Country"
+          value={formData.destinationCountry}
+          onChange={handleChange}
           required
         />
         <input
           type="date"
+          name="departureDate"
           placeholder="Departure Date"
-          value={departureDate}
-          onChange={(e) => setDepartureDate(e.target.value)}
+          value={formData.departureDate}
+          onChange={handleChange}
           required
         />
         <input
           type="date"
-          placeholder="Return Date"
-          value={returnDate}
-          onChange={(e) => setReturnDate(e.target.value)}
+          name="returnDate"
+          placeholder="Return Date (Optional)"
+          value={formData.returnDate}
+          onChange={handleChange}
         />
         <input
           type="number"
+          name="price"
           placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.valueAsNumber)}
+          value={formData.price}
+          onChange={handleChange}
           required
         />
-        <button type="submit">Create Flight</button>
+        <button type="submit" className={styles['submit-button']}>
+          Create Flight
+        </button>
       </form>
-      {message && <p className={styles['success-message']}>{message}</p>}
-      {error && <p className={styles['error-message']}>{error}</p>}
     </div>
   );
 };
