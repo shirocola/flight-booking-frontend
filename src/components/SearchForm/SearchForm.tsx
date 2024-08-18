@@ -36,7 +36,7 @@ const SearchForm: React.FC = () => {
   const [selectedFlightId, setSelectedFlightId] = useState<number | null>(null);
 
   useEffect(() => {
-    axios.get<Airport[]>('http://localhost:3000/flights/airports').then((response) => {
+    axios.get<Airport[]>('https://localhost:3000/flights/airports').then((response) => {
       setSuggestions(response.data);
     });
   }, []);
@@ -76,7 +76,7 @@ const SearchForm: React.FC = () => {
     console.log('Submitting payload:', payload);
 
     try {
-      const response = await axios.get<Flight[]>('http://localhost:3000/flights/search', {
+      const response = await axios.get<Flight[]>('https://localhost:3000/flights/search', {
         params: payload,
       });
       setFlights(response.data);

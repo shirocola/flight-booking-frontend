@@ -20,7 +20,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
     setError(null);
     setConfirmation(null);
     try {
-      const response = await axios.post('http://localhost:3000/bookings', {
+      const response = await axios.post('https://localhost:3000/bookings', {
         flightId,
         passengerName,
         email,
