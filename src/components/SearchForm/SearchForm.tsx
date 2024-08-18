@@ -34,6 +34,7 @@ const SearchForm: React.FC = () => {
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFlightId, setSelectedFlightId] = useState<number | null>(null);
+  const todayDate = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
     axios.get<Airport[]>('https://localhost:3000/flights/airports').then((response) => {
@@ -147,6 +148,7 @@ const SearchForm: React.FC = () => {
             id="departureDate"
             value={departureDate}
             onChange={(e) => setDepartureDate(e.target.value)}
+            min={todayDate}
             required
           />
         </div>
@@ -158,6 +160,7 @@ const SearchForm: React.FC = () => {
             id="returnDate"
             value={returnDate}
             onChange={(e) => setReturnDate(e.target.value || undefined)}
+            min={departureDate || todayDate}
           />
         </div>
 
