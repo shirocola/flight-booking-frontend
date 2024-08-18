@@ -1,50 +1,87 @@
-# React + TypeScript + Vite
+# Secure Flight Search and Booking System - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This repository contains the frontend for a secure flight search and booking system. The frontend is built with React and Vite and connects to the backend APIs for flight search, booking, and user authentication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Flight Search**: Allows users to search for flights by entering origin, destination, and travel dates.
+- **Booking System**: Capture passenger details and payment information securely to book flights.
+- **User Authentication**: Users can log in securely using JWT tokens.
+- **HTTPS**: All communications with the backend are secured using HTTPS.
+- **Form Validation**: Credit card number, CVV, and other input fields are validated to ensure correct data entry.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technology Stack
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: A JavaScript library for building user interfaces.
+- **Vite**: A fast build tool and development server.
+- **Axios**: A promise-based HTTP client for making API requests.
+- **SCSS**: For styling components with more flexibility and nesting capabilities.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Prerequisites
+
+- **Node.js**: Version 20 or higher
+- **npm**: Version 6 or higher
+- **OpenSSL**: For generating self-signed certificates (if not already done)
+
+## Getting Started
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/flight-booking-frontend.git
+cd flight-booking-frontend
+
+
+### Install Dependencies
+
+```bash
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Set Up Environment Variables
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Create a `.env` file in the root directory with the following content:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+bash
+
+`VITE_API_URL=https://localhost:3000` 
+
+### Generate SSL Certificates
+
+For development purposes, you can generate self-signed certificates:
+
+bash
+
+`openssl genrsa -out frontend.key 2048
+openssl req -new -key frontend.key -out frontend.csr
+openssl x509 -req -days 365 -in frontend.csr -signkey frontend.key -out frontend.cert` 
+
+### Start the Development Server
+
+bash
+
+`npm run dev` 
+
+The frontend will run on `https://localhost:5173`.
+
+## Testing
+
+You can use tools like Postman or curl to interact with the backend APIs. Ensure that the frontend is connected to the backend by performing searches and bookings.
+
+### API Endpoints Used
+
+-   **POST /auth/login**: Authenticate a user.
+-   **GET /flights/search**: Search for flights.
+-   **POST /bookings**: Book a flight.
+
+## Security Considerations
+
+-   **HTTPS**: All traffic is encrypted using SSL.
+-   **Input Validation**: Prevents incorrect data entry by validating forms before submission.
+-   **Error Handling**: Ensures that sensitive information is not exposed in error messages.
+
+## License
+
+This project is licensed under the MIT License.
