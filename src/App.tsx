@@ -4,11 +4,15 @@ import Home from './pages/Home';
 import Login from './components/Login/Login';
 import Logout from './components/Logout/Logout';
 import { isAuthenticated } from './utils/authUtils';
+import AdminLogin from './components/admin/Login/AdminLogin';
+import AdminDashboard from './components/admin/Dashboard/AdminDashboard';
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route
