@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# CERTIFICATES
+*.pem
+*.key
+*.csr
+*.cert
