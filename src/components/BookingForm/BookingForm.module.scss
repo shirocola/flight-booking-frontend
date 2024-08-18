@@ -1,15 +1,68 @@
-/* BookingForm.module.scss */
 .booking-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  background-color: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  width: 100%; /* Ensure it takes up full width */
+  box-sizing: border-box; /* Include padding and border in the element's width and height */
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #007bff;
+    outline: none;
   }
-  
-  .error {
-    color: red;
+}
+
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%; /* Ensure the button takes up full width */
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, transform 0.2s;
+
+  &:hover {
+    background: linear-gradient(135deg, #0056b3, #00408d);
+    transform: translateY(-2px);
   }
-  
-  .confirmation {
-    color: green;
+
+  &:active {
+    transform: translateY(0);
   }
-  
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+.error {
+  color: #dc3545;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  text-align: center; /* Center-align the error message */
+}
+
+.confirmation {
+  color: #28a745;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  text-align: center; /* Center-align the confirmation message */
+}

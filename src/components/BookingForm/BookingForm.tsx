@@ -43,6 +43,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
         value={passengerName}
         onChange={(e) => setPassengerName(e.target.value)}
         required
+        className={styles['input']}
       />
       <input
         type="email"
@@ -50,6 +51,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
+        className={styles['input']}
       />
       <input
         type="text"
@@ -57,8 +59,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
         value={paymentDetails}
         onChange={(e) => setPaymentDetails(e.target.value)}
         required
+        className={styles['input']}
       />
-      <button type="submit">
+      <button type="submit" className={styles['submit-button']} disabled={isSubmitting}>
         {isSubmitting ? 'Booking...' : 'Book Flight'}
       </button>
 

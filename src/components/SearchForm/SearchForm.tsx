@@ -3,8 +3,10 @@ import axios from 'axios';
 import styles from './SearchForm.module.scss';
 import { FaSearch } from 'react-icons/fa';
 import Modal from '../Modal/Modal';
+import BookingForm from '../BookingForm/BookingForm';
 
 interface Flight {
+  id: number;
   origin: string;
   destination: string;
   departureDate: string;
@@ -25,30 +27,27 @@ const SearchForm: React.FC = () => {
   const [returnDate, setReturnDate] = useState<string | undefined>(undefined); // Allow undefined
   const [flights, setFlights] = useState<Flight[]>([]);
   const [suggestions, setSuggestions] = useState<Airport[]>([]);
+  const [filteredDestinations, setFilteredDestinations] = useState<Airport[]>([]);
   const [dropdownVisible, setDropdownVisible] = useState({
     origin: false,
     destination: false,
   });
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedFlightId, setSelectedFlightId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (origin || destination) {
-      axios.get<Airport[]>('http://localhost:3000/flights/airports').then((response) => {
-        const filteredSuggestions = response.data.filter((airport) =>
-          origin
-            ? airport.city.toLowerCase().startsWith(origin.toLowerCase())
-            : airport.city.toLowerCase().startsWith(destination.toLowerCase())
-        );
-        setSuggestions(filteredSuggestions);
-      });
-    } else {
-      setSuggestions([]);
-    }
-  }, [origin, destination]);
+    axios.get<Airport[]>('http://localhost:3000/flights/airports').then((response) => {
+      setSuggestions(response.data);
+    });
+  }, []);
 
   const handleOriginSelect = (airport: Airport) => {
     setOrigin(`${airport.city} (${airport.code}), ${airport.country}`);
     setDropdownVisible({ ...dropdownVisible, origin: false });
+    const filtered = suggestions.filter(
+      (suggestion) => suggestion.city !== airport.city
+    );
+    setFilteredDestinations(filtered);
   };
 
   const handleDestinationSelect = (airport: Airport) => {
@@ -58,14 +57,27 @@ const SearchForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Extract the airport codes from origin and destination strings
+    const originCodeMatch = origin.match(/\(([^)]+)\)/);
+    const destinationCodeMatch = destination.match(/\(([^)]+)\)/);
+
+    // If matches are found, use them; otherwise, fallback to a trimmed version
+    const originCode = originCodeMatch ? originCodeMatch[1] : origin.trim();
+    const destinationCode = destinationCodeMatch ? destinationCodeMatch[1] : destination.trim();
+
+    const payload = {
+      origin: originCode,
+      destination: destinationCode,
+      departureDate,
+      returnDate: returnDate || undefined,
+    };
+
+    console.log('Submitting payload:', payload);
+
     try {
       const response = await axios.get<Flight[]>('http://localhost:3000/flights/search', {
-        params: {
-          origin,
-          destination,
-          departureDate,
-          returnDate: returnDate || undefined, // Send returnDate if defined
-        },
+        params: payload,
       });
       setFlights(response.data);
 
@@ -75,6 +87,10 @@ const SearchForm: React.FC = () => {
     } catch (error) {
       console.error('Error fetching flights:', error);
     }
+  };
+
+  const handleBookNow = (flightId: number) => {
+    setSelectedFlightId(flightId === selectedFlightId ? null : flightId);
   };
 
   return (
@@ -113,9 +129,9 @@ const SearchForm: React.FC = () => {
             onBlur={() => setDropdownVisible({ ...dropdownVisible, destination: false })}
             required
           />
-          {dropdownVisible.destination && suggestions.length > 0 && (
+          {dropdownVisible.destination && filteredDestinations.length > 0 && (
             <ul className={styles['suggestions']}>
-              {suggestions.map((airport) => (
+              {filteredDestinations.map((airport) => (
                 <li key={airport.code} onMouseDown={() => handleDestinationSelect(airport)}>
                   {airport.city} ({airport.code}), {airport.country}
                 </li>
@@ -156,9 +172,24 @@ const SearchForm: React.FC = () => {
             <h2>Search Results</h2>
             <ul>
               {flights.map((flight, index) => (
-                <li key={index}>
-                  {flight.origin} to {flight.destination} on {flight.departureDate}
-                  {flight.returnDate && `, returning on ${flight.returnDate}`} - ${flight.price}
+                <li key={index} className={styles['flight-item']}>
+                  <span className={styles['flight-details']}>
+                    {flight.origin} to {flight.destination} on {flight.departureDate}
+                    {flight.returnDate && `, returning on ${flight.returnDate}`} - ${flight.price}
+                  </span>
+                  <div className={styles['action-container']}>
+                    <button
+                      className={`${styles['book-button']} ${selectedFlightId === flight.id ? styles['cancel-button'] : ''}`}
+                      onClick={() => handleBookNow(flight.id)}
+                    >
+                      {selectedFlightId === flight.id ? 'Cancel' : 'Book Now'}
+                    </button>
+                  </div>
+                  {selectedFlightId === flight.id && (
+                    <div className={styles['booking-form-container']}>
+                      <BookingForm flightId={flight.id} />
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
