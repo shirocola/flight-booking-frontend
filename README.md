@@ -120,7 +120,7 @@ openssl x509 -req -days 365 -in frontend.csr -signkey frontend.key -out frontend
   
 
 ```bash
-`npm run dev`
+npm run dev
 ```
   
 
