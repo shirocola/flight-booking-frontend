@@ -63,7 +63,7 @@ This repository contains the frontend for a secure flight search and booking sys
 
 ```bash
 
-git  clone  https://github.com/yourusername/flight-booking-frontend.git
+git  clone  https://github.com/shirocoal/flight-booking-frontend.git
 
 cd  flight-booking-frontend
 ```
