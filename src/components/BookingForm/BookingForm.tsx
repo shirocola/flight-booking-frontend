@@ -46,18 +46,38 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
     setCardCVV(value);
   };
 
+  const validateExpiryDate = (expiry: string) => {
+    const regex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+    if (!regex.test(expiry)) {
+      return false;
+    }
+    const [month, year] = expiry.split('/').map(Number);
+    const currentYear = new Date().getFullYear() % 100;
+    const currentMonth = new Date().getMonth() + 1;
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
     setConfirmation(null);
-
+  
     if (!validateCardNumber(cardNumber)) {
       setError('Invalid credit card number. Please check and try again.');
       setIsSubmitting(false);
       return;
     }
-
+  
+    if (!validateExpiryDate(cardExpiry)) {
+      setError('Invalid expiry date. Please check and try again.');
+      setIsSubmitting(false);
+      return;
+    }
+  
     try {
       const response = await axios.post('https://localhost:3000/bookings', {
         flightId,
@@ -66,10 +86,18 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
         cardNumber,
         cardCVV,
         cardExpiry,
-      });
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });      
       setConfirmation('Booking confirmed! Your booking ID is: ' + response.data.id);
     } catch (error) {
-      setError('Error creating booking. Please try again later.');
+      if (axios.isAxiosError(error) && error.response) {
+        setError(`Booking failed: ${error.response.data.message}`);
+      } else {
+        setError('Error creating booking. Please try again later.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -97,23 +125,23 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
         type="text"
         placeholder="Card Number"
         value={cardNumber}
-        onInput={handleCardNumberInput} // Handle numeric input
+        onInput={handleCardNumberInput}
         required
         className={styles['input']}
-        maxLength={16} // Limit the number of characters to 16
-        inputMode="numeric" // Use numeric input mode
-        pattern="[0-9]*" // Ensure only numeric input
+        maxLength={16}
+        inputMode="numeric"
+        pattern="[0-9]*"
       />
       <input
         type="password"
         placeholder="CVV"
         value={cardCVV}
-        onInput={handleCVVInput} // Handle numeric input
+        onInput={handleCVVInput}
         required
         className={styles['input']}
-        maxLength={4} // Limit the number of characters to 4 for CVV
-        inputMode="numeric" // Use numeric input mode
-        pattern="[0-9]*" // Ensure only numeric input
+        maxLength={4}
+        inputMode="numeric"
+        pattern="[0-9]*"
       />
       <input
         type="text"
@@ -122,7 +150,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
         onChange={(e) => setCardExpiry(e.target.value)}
         required
         className={styles['input']}
-        maxLength={5} // Limit the expiry date format to MM/YY
+        maxLength={5}
       />
       <button type="submit" className={styles['submit-button']} disabled={isSubmitting}>
         {isSubmitting ? 'Booking...' : 'Book Flight'}

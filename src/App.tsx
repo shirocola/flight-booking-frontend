@@ -6,6 +6,7 @@ import Logout from './components/Logout/Logout';
 import { isAuthenticated } from './utils/authUtils';
 import AdminLogin from './components/admin/Login/AdminLogin';
 import AdminDashboard from './components/admin/Dashboard/AdminDashboard';
+import Profile from './components/Profile/Profile'; // Import the Profile component
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,12 @@ const App: React.FC = () => {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
+        <Route
+          path="/profile"
+          element={
+            isAuthenticated() ? <Profile /> : <Navigate to="/login" />
+          }
+        />
         <Route
           path="/"
           element={
