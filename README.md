@@ -128,11 +128,15 @@ The frontend will run on `https://localhost:5173`.
 
   
 
-## Testing
+## Testing with Mock Credit Card Data
 
-  
+When testing the application, you can use the following mock credit card details:
 
-You can use tools like Postman or curl to interact with the backend APIs. Ensure that the frontend is connected to the backend by performing searches and bookings.
+- **Card Number**: `4111111111111111` (Visa)
+- **CVV**: `123`
+- **Expiry Date**: `12/24`
+
+These details can be used during the booking process in development or testing environments.
 
   
 
