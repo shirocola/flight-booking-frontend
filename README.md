@@ -9,6 +9,12 @@
 
 This repository contains the frontend for a secure flight search and booking system. The frontend is built with React and Vite and connects to the backend APIs for flight search, booking, and user authentication.
 
+## Technical Stack
+
+### Frontend: React (TypeScript)
+- **Reason:** React is a popular library for building user interfaces. Using TypeScript with React provides better tools and error checking, which helps create a more reliable application. I chose React because I use it regularly at work, which means I can build the frontend quickly and follow best practices without needing extra time to learn.
+
+
   
 
 ## Features
