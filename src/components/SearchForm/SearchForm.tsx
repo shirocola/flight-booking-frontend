@@ -173,13 +173,13 @@ const SearchForm: React.FC = () => {
         {flights.length > 0 ? (
           <>
             <h2>Search Results</h2>
-            <ul>
+            <ul className={styles['flight-list']}>
               {flights.map((flight, index) => (
                 <li key={index} className={styles['flight-item']}>
-                  <span className={styles['flight-details']}>
+                  <div className={styles['flight-details']}>
                     {flight.origin} to {flight.destination} on {flight.departureDate}
                     {flight.returnDate && `, returning on ${flight.returnDate}`} - ${flight.price}
-                  </span>
+                  </div>
                   <div className={styles['action-container']}>
                     <button
                       className={`${styles['book-button']} ${selectedFlightId === flight.id ? styles['cancel-button'] : ''}`}
@@ -188,14 +188,14 @@ const SearchForm: React.FC = () => {
                       {selectedFlightId === flight.id ? 'Cancel' : 'Book Now'}
                     </button>
                   </div>
-                  {selectedFlightId === flight.id && (
-                    <div className={styles['booking-form-container']}>
-                      <BookingForm flightId={flight.id} />
-                    </div>
-                  )}
                 </li>
               ))}
             </ul>
+            {selectedFlightId && (
+              <div className={styles['booking-form-container']}>
+                <BookingForm flightId={selectedFlightId} />
+              </div>
+            )}
           </>
         ) : null}
       </div>

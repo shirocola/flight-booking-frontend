@@ -65,19 +65,19 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
     setIsSubmitting(true);
     setError(null);
     setConfirmation(null);
-  
+
     if (!validateCardNumber(cardNumber)) {
       setError('Invalid credit card number. Please check and try again.');
       setIsSubmitting(false);
       return;
     }
-  
+
     if (!validateExpiryDate(cardExpiry)) {
       setError('Invalid expiry date. Please check and try again.');
       setIsSubmitting(false);
       return;
     }
-  
+
     try {
       const response = await axios.post('https://localhost:3000/bookings', {
         flightId,
@@ -90,7 +90,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ flightId }) => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      });      
+      });
       setConfirmation('Booking confirmed! Your booking ID is: ' + response.data.id);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

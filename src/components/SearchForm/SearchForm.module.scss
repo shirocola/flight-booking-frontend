@@ -96,15 +96,74 @@ input {
   font-size: 1.5rem;
 }
 
-.results ul {
+.flight-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; // Adds space between each list item
+
+  li {
+    background-color: #fff; // White background for each item
+    border-radius: 8px; // Rounded corners for a modern look
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Subtle shadow for depth
+    padding: 1.5rem; // Padding for content inside the item
+    transition: transform 0.3s, box-shadow 0.3s; // Smooth transition for hover effects
+
+    &:hover {
+      transform: translateY(-5px); // Slight lift on hover
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); // Enhanced shadow on hover
+      background-color: #f7f9fc; // Slight background color change on hover
+    }
+
+    // Media queries for responsive design
+    @media (max-width: 768px) {
+      padding: 1rem; // Adjust padding for smaller screens
+    }
+
+    .flight-details {
+      font-size: 1rem;
+      color: #333; // Darker text for readability
+      margin-bottom: 0.5rem;
+
+      // Responsiveness for smaller screens
+      @media (max-width: 768px) {
+        font-size: 0.9rem;
+      }
+    }
+
+    .action-container {
+      display: flex;
+      justify-content: flex-end; // Align buttons to the right
+      gap: 1rem; // Space between buttons
+
+      // Responsive adjustments
+      @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 0.5rem; // Reduce gap for smaller screens
+      }
+    }
+
+    .book-button,
+    .cancel-button {
+      flex: 1; // Ensure buttons take equal space
+      max-width: 150px; // Limit the maximum width of the buttons
+
+      @media (max-width: 768px) {
+        max-width: 100%; // Full width on smaller screens
+      }
+    }
+  }
 }
 
-.results li {
-  padding: 0.75rem 0;
+
+.flight-item {
+  padding: 1rem 0;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: #555;
   font-size: 1rem;
 }
@@ -116,21 +175,11 @@ input {
 .action-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
 }
 
 .booking-form-container {
-  margin-top: 1rem;
-  width: 100%; /* Ensure full width */
-}
-
-.booking-form {
-  background-color: #f5f5f5;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Ensure full width */
+  margin-top: 2rem;
 }
 
 .book-button,
